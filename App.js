@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, StatusBar, TextInput, FlatList } from "react-native";
 
 import { splash } from "./assets/splash.png"
@@ -12,10 +13,11 @@ const App = () => {
     const [todo, setToDo] = useState("");
     const [todos, setToDos] = useState([]);
 
+
     const handleToDo = () => {
         if (!todo) return;
 
-        setToDos([...todos, { id: Date.now(), text: todo }]);
+        setToDos([...todos, { id: Date.now(), text: todo, status: "new" }]);
         setToDo("");
 
     }
@@ -23,10 +25,11 @@ const App = () => {
     return (
         <View style={styles.container}>
             <StatusBar styles="auto"></StatusBar>
-            <Text style={styles.heading}>To-Do Memories</Text>
+            <Text style={styles.heading}>To-Do / Not To-Do</Text>
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.inputText}
+                    autoFocus={true}
                     placeholder="What's new to remember?"
                     onChangeText={(text) => setToDo(text)}
                     value={todo}
@@ -37,19 +40,29 @@ const App = () => {
             </View>
 
             <View style={styles.todoSpace}>
-            <Text style={styles.heading2}>Your Pinned Memories</Text>
-                <FlatList
-                    keyExtractor={(item) => item.id.toString()}
-                    data={todos}
-                    renderItem={({ item }) => 
-                        <SingleToDo
-                            todo={item}
-                            todos={todos}
-                            setToDo={setToDos}
-                        />
-                    }
+                <Text style={styles.heading2}>Your Pinned To-Do Memories</Text>
+                {
+                    todos.length != 0 ?
+                        (
+                            <FlatList
+                                keyExtractor={(item) => item.id.toString()}
+                                data={todos}
+                                renderItem={({ item }) =>
+                                    <SingleToDo
+                                        todo={item}
+                                        todos={todos}
+                                        setToDos={setToDos}
+                                    />
+                                }
 
-                />
+                            />
+                        )
+                    :
+                    (
+                        <Text style={styles.blurText}>None yet</Text>
+                    )
+                }
+
             </View>
 
         </View>
@@ -66,12 +79,21 @@ const styles = StyleSheet.create({
         padding: 20
     },
     heading: {
-        fontSize: 40,
+        fontSize: 35,
         marginVertical: 30,
         fontWeight: "bold",
+        textTransform: "uppercase",
         color: "#333"
     },
-    
+    blurText: {
+        fontSize: 20,
+        fontWeight: "500",
+        color: "#fff",
+        textTransform: "uppercase",
+        letterSpacing: 2,
+        textAlign: "center",
+        marginVertical: 20
+    },
     inputContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -106,7 +128,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 0.5,
         borderTopColor: "#333"
     },
-    heading2:{
+    heading2: {
         fontSize: 25,
         fontWeight: "700",
         color: "#333",
