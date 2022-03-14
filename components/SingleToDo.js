@@ -13,7 +13,7 @@ export default function SingleToDo({ todo, todos, setToDos }) {
     const [editText, setEditText] = useState(todo.text);
 
     useEffect(()=> {
-        AsyncStorage.setItem("todos",JSON.stringify)
+        AsyncStorage.setItem("todos",JSON.stringify(todos))
     },[todos]);
 
     const editTodo = () => {
@@ -32,7 +32,7 @@ export default function SingleToDo({ todo, todos, setToDos }) {
                         : i
                 )
             );
-            AsyncStorageorage.setItem("todos",JSON.stringify);
+            AsyncStorage.setItem("todos",JSON.stringify(todos))
             setEdit(false);
         }
     }

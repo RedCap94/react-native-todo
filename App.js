@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, StatusBar, TextInput, FlatList } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, StatusBar, TextInput, FlatList, ScrollView } from "react-native";
 
 import { splash } from "./assets/splash.png"
 import SingleToDo from "./components/SingleToDo";
@@ -22,6 +22,16 @@ const App = () => {
 
     }
 
+    const fetchTodos = async() =>{
+        const data = await AsyncStorage.getItem("todos");
+        if(data)
+            setToDos(JSON.parse(data));
+    }
+
+    useEffect(()=>{
+        fetchTodos()
+    },[])
+
     return (
         <View style={styles.container}>
             <StatusBar styles="auto"></StatusBar>
@@ -29,7 +39,6 @@ const App = () => {
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.inputText}
-                    autoFocus={true}
                     placeholder="What's new to remember?"
                     onChangeText={(text) => setToDo(text)}
                     value={todo}
@@ -45,6 +54,7 @@ const App = () => {
                     todos.length != 0 ?
                         (
                             <FlatList
+                                style={styles.listView}
                                 keyExtractor={(item) => item.id.toString()}
                                 data={todos}
                                 renderItem={({ item }) =>
@@ -135,4 +145,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginVertical: 20
     },
+    listView:{
+
+    }
 });
