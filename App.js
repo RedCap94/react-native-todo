@@ -22,17 +22,18 @@ const App = () => {
 
     }
 
-    const fetchTodos = async() =>{
+    const fetchTodos = async () => {
         const data = await AsyncStorage.getItem("todos");
-        if(data)
+        if (data)
             setToDos(JSON.parse(data));
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchTodos()
-    },[])
+    }, [])
 
     return (
+
         <View style={styles.container}>
             <StatusBar styles="auto"></StatusBar>
             <Text style={styles.heading}>To-Do / Not To-Do</Text>
@@ -48,34 +49,57 @@ const App = () => {
                     style={styles.button}><Text style={styles.buttonText}>Pin</Text></TouchableOpacity>
             </View>
 
-            <View style={styles.todoSpace}>
-                <Text style={styles.heading2}>Your Pinned To-Do Memories</Text>
-                {
-                    todos.length != 0 ?
-                        (
-                            <FlatList
-                                style={styles.listView}
-                                keyExtractor={(item) => item.id.toString()}
-                                data={todos}
-                                renderItem={({ item }) =>
-                                    <SingleToDo
-                                        todo={item}
-                                        todos={todos}
-                                        setToDos={setToDos}
-                                    />
-                                }
+            <ScrollView style={styles.todoSpace}>
+                <View>
+                    <Text style={styles.heading2}>Your Pinned To-Do Memories</Text>
+                    {
+                        todos.length != 0 ?
+                            (
+                                // <FlatList
+                                //     scrollEnabled={false}
+                                //     style={styles.listView}
+                                //     keyExtractor={(item) => item.id.toString()}
+                                //     data={todos}
+                                //     renderItem={({ item }) =>
+                                //         <SingleToDo
+                                //             todo={item}
+                                //             todos={todos}
+                                //             setToDos={setToDos}
+                                //         />
+                                //     }
 
-                            />
-                        )
-                    :
-                    (
-                        <Text style={styles.blurText}>None yet</Text>
-                    )
-                }
+                                // />
+                                <View style={styles.listView}>
+                                    {
+                                        todos.map((item) => {
+                                            return (
+                                                <View key={item.id}>
+        
+                                                    <SingleToDo
+                                                        todo={item}
+                                                        todos={todos}
+                                                        setToDos={setToDos}
+                                                    />
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                </View>
+                            )
+                            :
+                            (
+                                <Text style={styles.blurText}>None yet</Text>
+                            )
+                    }
+                </View>
 
-            </View>
+
+            </ScrollView>
 
         </View>
+
+
+
     );
 };
 export default App;
@@ -86,7 +110,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         backgroundColor: "#5edbc0",
-        padding: 20
+        padding: 20,
+        paddingBottom: 10
     },
     heading: {
         fontSize: 35,
@@ -136,7 +161,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
         paddingVertical: 20,
         borderTopWidth: 0.5,
-        borderTopColor: "#333"
+        borderTopColor: "#333",
     },
     heading2: {
         fontSize: 25,
@@ -145,7 +170,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginVertical: 20
     },
-    listView:{
-
+    listView: {
+        paddingVertical: 20
     }
 });
