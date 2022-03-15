@@ -42,13 +42,14 @@ export default function SingleToDo({ todo, todos, setToDos }) {
             setEdit(false);
         setToDos(
             todos.map((i) =>
-                i.id === todo.id
+                (i.id === todo.id
                     ? {
                         id: i.id,
                         text: i.text,
                         status: "done"
                     }
                     : i
+                )
             )
         );
     }

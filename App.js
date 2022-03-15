@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, StatusBar, TextInput, FlatList, ScrollView } from "react-native";
+import Draggable from 'react-native-draggable';
 
 import { splash } from "./assets/splash.png"
 import SingleToDo from "./components/SingleToDo";
@@ -69,12 +70,11 @@ const App = () => {
                                 //     }
 
                                 // />
+                                // <Draggable x={50} y={50}></Draggable>
                                 <View style={styles.listView}>
                                     {
-                                        todos.map((item) => {
-                                            return (
+                                        todos.map((item) => (
                                                 <View key={item.id}>
-        
                                                     <SingleToDo
                                                         todo={item}
                                                         todos={todos}
@@ -82,7 +82,7 @@ const App = () => {
                                                     />
                                                 </View>
                                             )
-                                        })
+                                        )
                                     }
                                 </View>
                             )
